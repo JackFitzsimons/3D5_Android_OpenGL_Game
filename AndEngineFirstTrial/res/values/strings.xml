@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">AndEngineFirstTrial</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_1">Square</string>
+	<string name="title_2">Hater</string>
+	<string name="start">Kick the little squares ass!</string>
+    
+
+</resources>
