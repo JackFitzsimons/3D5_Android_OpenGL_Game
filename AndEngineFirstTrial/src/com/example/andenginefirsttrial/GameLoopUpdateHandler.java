@@ -8,6 +8,8 @@ public class GameLoopUpdateHandler implements IUpdateHandler{
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
 		((GameScene)MainActivity.getSharedInstance().mCurrentScene).moveSquare();
+		((GameScene)MainActivity.getSharedInstance().mCurrentScene).moveCircle();
+
 		((GameScene)MainActivity.getSharedInstance().mCurrentScene).cleaner();
 		
 	}

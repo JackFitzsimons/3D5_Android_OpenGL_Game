@@ -27,8 +27,17 @@ public class Square {
 
 	        mCamera = MainActivity.getSharedInstance().mCamera;
 	        
-	        int XMax = (int) (mCamera.getWidth() - sprite.getWidth() / 2);
-	        int YMax = (int) (mCamera.getHeight() - sprite.getHeight()/2);
+	        Random rand = new Random();
+	        
+	        speedX = (rand.nextFloat()*5);
+	        
+	        speedY = (float) Math.sqrt(25 - Math.pow(speedX, 2));
+	        
+	        speedX-=2.5;
+	        speedY-=2.5;
+	        
+	        int XMax = (int) (mCamera.getWidth() - sprite.getWidth() );
+	        int YMax = (int) (mCamera.getHeight() - sprite.getHeight());
 	        int randomX = randomGenerator.nextInt(XMax);
 	        int randomY= randomGenerator.nextInt(YMax);
 	        sprite.setPosition(randomX,
@@ -45,7 +54,6 @@ public class Square {
 
 				float newX, newY;
 				
-				float randomMove;
 				newX = sprite.getX();
 				// Calculate New X,Y Coordinates within Limits
 				if (newX > lL-speedX && newX <rL-speedX){
