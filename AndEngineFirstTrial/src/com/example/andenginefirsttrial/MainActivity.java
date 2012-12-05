@@ -1,5 +1,6 @@
 package com.example.andenginefirsttrial;
 
+//importing required libraries
 import org.andengine.engine.camera.Camera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -11,9 +12,10 @@ import org.andengine.opengl.font.FontFactory;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.graphics.Typeface;
+import android.util.Log;
 
 
-
+/* main controlling class*/
 public class MainActivity extends SimpleBaseGameActivity {
 
 	
@@ -35,8 +37,17 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public Camera mCamera;
 	    
 	public Scene mCurrentScene;
-	
+// create an instance of main activity, call it instance	
 	public static MainActivity instance;
+	
+	//declare a char sequence to be used in 
+	public CharSequence scoreString;
+	
+	//creates an instance of each scene in the game allowing each to be accessed at any time
+	public GameOverScene GOS;
+	public GameScene GS;
+	public SplashScreen SS;
+	public MainMenuScene MMS;
     
 	 // ===========================================================
      // Constructors
@@ -64,11 +75,19 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mFont.load();
 	}
 
+	//Initialize each screen, when called returns the splash screen
 	protected Scene onCreateScene() {
 		mEngine.registerUpdateHandler(new FPSLogger());
-		mCurrentScene = new SplashScreen();
+		GOS= new GameOverScene() ;
+		GS= new GameScene();
+		SS= new SplashScreen();
+		MMS= new MainMenuScene();
+				
+		mCurrentScene = SS;
+		
+		SS.SceneSetUp();
+		//return mCurrentScene;
 		return mCurrentScene;
-
 	}
 
         
