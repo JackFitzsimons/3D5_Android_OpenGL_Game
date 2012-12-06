@@ -9,10 +9,13 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.graphics.Typeface;
-import android.util.Log;
+
 
 
 /* main controlling class*/
@@ -48,6 +51,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public GameScene GS;
 	public SplashScreen SS;
 	public MainMenuScene MMS;
+	
+	public BitmapTextureAtlas mBitmapTextureAtlas;
+	public TextureRegion mSquareType1;
+	public TextureRegion mSquareType2;
+	public TextureRegion mSquareType3;
     
 	 // ===========================================================
      // Constructors
@@ -71,6 +79,11 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	@Override
 	protected void onCreateResources() {
+		mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 51, 153);
+	    mSquareType1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box1.png", 0, 0);
+	    mSquareType2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box2.png", 0, 51);
+	    mSquareType3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box3.png", 0, 102);
+	    mBitmapTextureAtlas.load();
 	    mFont = FontFactory.create(this.getFontManager(),this.getTextureManager(), 256, 256,Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 32);
 	    mFont.load();
 	}

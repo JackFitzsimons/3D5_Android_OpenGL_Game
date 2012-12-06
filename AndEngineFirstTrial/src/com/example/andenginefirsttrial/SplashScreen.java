@@ -7,14 +7,12 @@ import org.andengine.entity.modifier.MoveXModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.scene.menu.MenuScene;
-import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
-import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.util.modifier.IModifier;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 // defining the splash screen class
@@ -57,7 +55,7 @@ import android.view.MotionEvent;
 	}
 	
 	public void loadResources(){
-		DelayModifier dMod = new DelayModifier(2, new IEntityModifierListener() {
+				DelayModifier dMod = new DelayModifier(2, new IEntityModifierListener() {
 		    @Override
 		    public void onModifierStarted(IModifier arg0, IEntity arg1) {
 		    }
