@@ -260,6 +260,7 @@ public class Square {
 	    	if(k==flash) setColor(2,k);
 	    	setColor(1,k);
 	    	ON = k;
+	    	
 }
 	    
 	    void setColor(int i, int k){

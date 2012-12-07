@@ -6,6 +6,7 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -57,9 +58,21 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public TextureRegion mSquareType2;
 	public TextureRegion mSquareType3;
 	
-	public BitmapTextureAtlas mBackgroundTexture;
-	public TextureRegion mMenuBgTexture;
-	public TextureRegion mSplashBgTexture;
+	public TextureRegion mSnowFlake1;
+	public TextureRegion mSnowFlake2;
+	public TextureRegion mSnowFlake3;
+	public TextureRegion mSnowFlake4;
+	public TextureRegion mSnowFlake5;
+	public TextureRegion mSnowFlake6;
+	public TextureRegion mSnowFlake7;
+	
+	public BitmapTextureAtlas mSantaS;
+	public TextureRegion mSantasSleigh;
+	
+	public BitmapTextureAtlas mheader;
+	public TextureRegion mGamePlayHeader;
+	
+	public SnowFlake mSnowSprite[] = new SnowFlake[14];
     
 	 // ===========================================================
      // Constructors
@@ -83,19 +96,32 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	@Override
 	protected void onCreateResources() {
-		mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 51, 153);
+		mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 256);
 	    mSquareType1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box1.png", 0, 0);
-	    mSquareType2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box2.png", 0, 51);
-	    mSquareType3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box3.png", 0, 102);
+	    mSquareType2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box2.png", 0, 64);
+	    mSquareType3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "christmas_box3.png", 0, 128);
+	    
+	    mSnowFlake1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes1.png", 64, 0);
+	    mSnowFlake2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes2.png", 64, 64);
+	    mSnowFlake3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes3.png", 64, 128);
+	    mSnowFlake4 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes4.png", 64, 192);
+	    mSnowFlake5 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes5.png", 128, 0);
+	    mSnowFlake6 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes6.png", 128, 64);
+	    mSnowFlake7 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBitmapTextureAtlas, this, "snow_flakes7.png", 128, 128);
+
 	    mBitmapTextureAtlas.load();
 	    mFont = FontFactory.create(this.getFontManager(),this.getTextureManager(), 256, 256,Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 32);
 	    mFont.load();
 	    
-	    mBackgroundTexture = new BitmapTextureAtlas(this.getTextureManager(), 1601, 480);
-	    mSplashBgTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTexture, this, "splash_bg.png", 0, 0);
-	    mMenuBgTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTexture, this, "menu_screen.png", 801, 0);
+	    mSantaS = new BitmapTextureAtlas(this.getTextureManager(), 512, 256);
+	    mSantasSleigh = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mSantaS, this, "santas_sleigh.png", 0, 0);
 
-	    mBackgroundTexture.load();
+	    mSantaS.load();
+	    
+	    mheader = new BitmapTextureAtlas(this.getTextureManager(), 800, 70);
+	    mGamePlayHeader = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mheader, this, "game_play_header.png", 0, 0);
+
+	    mSantaS.load();
 	}
 
 	//Initialize each screen, when called returns the splash screen

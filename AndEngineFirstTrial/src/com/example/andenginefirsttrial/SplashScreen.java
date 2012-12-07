@@ -1,12 +1,15 @@
 package com.example.andenginefirsttrial;
 
+import java.util.Random;
+
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.SpriteBackground;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.modifier.IModifier;
 
@@ -18,52 +21,41 @@ import android.view.MotionEvent;
 	
 	public SplashScreen(){
 		//default constructor
-		
-
-		loadResources();
-	}
+			}
 	
 	//method for setting or resetting Splashscreen
 	public void SceneSetUp(){
 	    MainActivity.getSharedInstance().setCurrentScene(this);
 
-		/*setBackground(new Background(0.09804f, 0.6274f, 0.8784f));*/
+		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		activity = MainActivity.getSharedInstance();
-		/*Text title1 = new Text(0, 0, activity.mFont, activity.getString(R.string.title_1), activity.getVertexBufferObjectManager());
-		Text title2 = new Text(0, 0, activity.mFont, activity.getString(R.string.title_2), activity.getVertexBufferObjectManager());
 		
-		//title1.setColor(Color.WHITE);
-		//title2.setColor(Color.WHITE);
+		activity.mSnowSprite[0] = new SnowFlake(0f, 0f, activity.mSnowFlake1, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[1] = new SnowFlake(0f, 0f, activity.mSnowFlake2, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[2] = new SnowFlake(0f, 0f, activity.mSnowFlake3, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[3] = new SnowFlake(0f, 0f, activity.mSnowFlake4, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[4] = new SnowFlake(0f, 0f, activity.mSnowFlake5, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[5] = new SnowFlake(0f, 0f, activity.mSnowFlake6, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[6] = new SnowFlake(0f, 0f, activity.mSnowFlake7, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[7] = new SnowFlake(0f, 0f, activity.mSnowFlake1, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[8] = new SnowFlake(0f, 0f, activity.mSnowFlake2, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[9] = new SnowFlake(0f, 0f, activity.mSnowFlake3, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[10] = new SnowFlake(0f, 0f, activity.mSnowFlake4, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[11] = new SnowFlake(0f, 0f, activity.mSnowFlake5, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[12] = new SnowFlake(0f, 0f, activity.mSnowFlake6, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+		activity.mSnowSprite[13] = new SnowFlake(0f, 0f, activity.mSnowFlake7, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
+
 		
-		title1.setPosition(-title1.getWidth(), activity.mCamera.getHeight() / 2);
-		title2.setPosition(activity.mCamera.getWidth(), (activity.mCamera.getHeight() / 2));
-
-		attachChild(title1);
-		attachChild(title2);
-
-		title1.registerEntityModifier(new MoveXModifier(2, title1.getX(), activity.mCamera.getWidth() / 2 - title1.getWidth()));
-		title2.registerEntityModifier(new MoveXModifier(2, title2.getX(), activity.mCamera.getWidth() / 2));
-		*/
-	    
-	    SpriteBackground bg = new SpriteBackground(new Sprite(0f, 0f, activity.mSplashBgTexture, activity.getVertexBufferObjectManager()));
-        setBackground(bg);
+		for(int i=0; i<14;i++){
+			activity.mSnowSprite[i].setScale();
+		}
+		
+		this.attachChildren(activity.mSnowSprite);
 		
 		setOnSceneTouchListener(this);
 		
-    	//activity.MMS.SceneSetUp();
-
-	}
-	
-	public void loadResources(){
-				DelayModifier dMod = new DelayModifier(2, new IEntityModifierListener() {
-		    @Override
-		    public void onModifierStarted(IModifier arg0, IEntity arg1) {
-		    }
-		    public void onModifierFinished(IModifier arg0, IEntity arg1) {
-
-		    }
-		});
-		registerEntityModifier(dMod);
+		registerUpdateHandler(new SnowFlakeUpdateHandler());
+		
 
 	}
 
@@ -72,7 +64,7 @@ import android.view.MotionEvent;
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		// TODO Auto-generated method stub
 		if(pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN){
-		activity.MMS.SceneSetUp();
+			activity.MMS.SceneSetUp();
 		}
 		return true;
 	}

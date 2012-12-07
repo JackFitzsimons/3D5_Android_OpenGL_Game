@@ -1,12 +1,13 @@
 package com.example.andenginefirsttrial;
 
-import org.andengine.entity.scene.background.SpriteBackground;
+import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.menu.MenuScene;
 import org.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.scene.menu.item.TextMenuItem;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+
+import android.util.Log;
 
 public class MainMenuScene extends MenuScene implements IOnMenuItemClickListener{
 
@@ -20,12 +21,20 @@ public class MainMenuScene extends MenuScene implements IOnMenuItemClickListener
 	}
 	
 	public void SceneSetUp(){
+		
+		Log.w("Scene","Main Menu");
 
 		activity = MainActivity.getSharedInstance();
-
-		//setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
-		SpriteBackground bg = new SpriteBackground(new Sprite(0f, 0f, activity.mMenuBgTexture, activity.getVertexBufferObjectManager()));
-        setBackground(bg);
+		
+		activity.SS.detachChildren();
+		
+		this.detachChildren();
+		
+		attachChildren(activity.mSnowSprite);
+		
+		registerUpdateHandler(new SnowFlakeUpdateHandler());
+		
+		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
         
         Text HowToPlay1 = new Text(0, 0, activity.mFont, activity.getString(R.string.howtoplay1), activity.getVertexBufferObjectManager());
         
@@ -39,7 +48,7 @@ public class MainMenuScene extends MenuScene implements IOnMenuItemClickListener
         Text HowToPlay2 = new Text(0, 0, activity.mFont, activity.getString(R.string.howtoplay2), activity.getVertexBufferObjectManager());
         
         X = (activity.mCamera.getWidth() - HowToPlay2.getWidth())/2;
-        Y =  60 + HowToPlay1.getHeight();
+        Y = 45 + HowToPlay1.getHeight();
         
         HowToPlay2.setPosition(X,Y);
         
