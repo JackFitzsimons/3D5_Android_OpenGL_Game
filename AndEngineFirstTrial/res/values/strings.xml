@@ -6,7 +6,10 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_1">Square</string>
 	<string name="title_2">Hater</string>
-	<string name="start">Kick the little squares ass!</string>
-    
+	<string name="start">Click to start helping Santa</string>
+	<string name="howtoplay1">Quick tap the orange presents</string>
+	<string name="howtoplay2">To keep them in the sleigh!</string>
+	
+	
 
 </resources>

@@ -56,6 +56,10 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public TextureRegion mSquareType1;
 	public TextureRegion mSquareType2;
 	public TextureRegion mSquareType3;
+	
+	public BitmapTextureAtlas mBackgroundTexture;
+	public TextureRegion mMenuBgTexture;
+	public TextureRegion mSplashBgTexture;
     
 	 // ===========================================================
      // Constructors
@@ -86,6 +90,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mBitmapTextureAtlas.load();
 	    mFont = FontFactory.create(this.getFontManager(),this.getTextureManager(), 256, 256,Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL), 32);
 	    mFont.load();
+	    
+	    mBackgroundTexture = new BitmapTextureAtlas(this.getTextureManager(), 1601, 480);
+	    mSplashBgTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTexture, this, "splash_bg.png", 0, 0);
+	    mMenuBgTexture = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mBackgroundTexture, this, "menu_screen.png", 801, 0);
+
+	    mBackgroundTexture.load();
 	}
 
 	//Initialize each screen, when called returns the splash screen
