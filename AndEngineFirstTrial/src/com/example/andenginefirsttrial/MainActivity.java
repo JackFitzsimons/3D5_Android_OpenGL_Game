@@ -6,15 +6,17 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 
 
@@ -36,6 +38,9 @@ public class MainActivity extends SimpleBaseGameActivity {
      // Fields
      // ===========================================================
 	 
+	
+	public TimerActivity time;
+
 	public Font mFont;
 	
 	public Camera mCamera;
@@ -46,12 +51,18 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	//declare a char sequence to be used in 
 	public CharSequence scoreString;
+	public int T;
 	
 	//creates an instance of each scene in the game allowing each to be accessed at any time
 	public GameOverScene GOS;
 	public GameScene GS;
 	public SplashScreen SS;
 	public MainMenuScene MMS;
+	
+	public Font handWritingFontWHITE;
+	public Font handWritingFontRED;
+	public Font handWritingFontBLACK;
+	public ITexture fontTexture;
 	
 	public BitmapTextureAtlas mBitmapTextureAtlas;
 	public TextureRegion mSquareType1;
@@ -122,6 +133,19 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mGamePlayHeader = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mheader, this, "game_play_header.png", 0, 0);
 
 	    mSantaS.load();
+	    
+	    fontTexture = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
+
+	    handWritingFontWHITE = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",20f,true,Color.WHITE);
+	    handWritingFontRED = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.RED);
+	    handWritingFontBLACK = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.BLACK);
+	    
+	    getEngine().getTextureManager().loadTexture(fontTexture);
+	    
+	    getEngine().getFontManager().loadFont(handWritingFontWHITE);
+	    getEngine().getFontManager().loadFont(handWritingFontRED);
+	    getEngine().getFontManager().loadFont(handWritingFontBLACK);
+
 	}
 
 	//Initialize each screen, when called returns the splash screen

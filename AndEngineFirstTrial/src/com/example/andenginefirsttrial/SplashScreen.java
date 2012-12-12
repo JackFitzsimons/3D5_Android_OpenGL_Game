@@ -18,6 +18,9 @@ import android.view.MotionEvent;
 // defining the splash screen class
 	public class SplashScreen extends Scene implements IOnSceneTouchListener{
 	MainActivity activity;
+	Sprite SantaSleigh;
+	Text Intro1;
+	Text Intro2;
 	
 	public SplashScreen(){
 		//default constructor
@@ -45,13 +48,24 @@ import android.view.MotionEvent;
 		activity.mSnowSprite[12] = new SnowFlake(0f, 0f, activity.mSnowFlake6, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
 		activity.mSnowSprite[13] = new SnowFlake(0f, 0f, activity.mSnowFlake7, activity.getVertexBufferObjectManager(), activity.mCamera.getHeight(), activity.mCamera.getWidth());
 
+		SantaSleigh = new Sprite(activity.mCamera.getWidth()/10, activity.mCamera.getHeight()/3,activity.mSantasSleigh, activity.getVertexBufferObjectManager());
+
+		SantaSleigh.setScale(0.8f);
+		
+		Intro1 = new Text(activity.mCamera.getWidth()*2/3, activity.mCamera.getHeight()/10, activity.handWritingFontRED, "Help Santa", 50, activity.getVertexBufferObjectManager());
+		Intro2 = new Text(activity.mCamera.getWidth()/2, activity.mCamera.getHeight()/10 + Intro1.getHeight() + 5, activity.handWritingFontWHITE, "protect the presents in danger", 50, activity.getVertexBufferObjectManager());
 		
 		for(int i=0; i<14;i++){
 			activity.mSnowSprite[i].setScale();
 		}
-		
+				
 		this.attachChildren(activity.mSnowSprite);
 		
+		this.attachChild(SantaSleigh);
+		
+		this.attachChild(Intro1);
+		this.attachChild(Intro2);
+
 		setOnSceneTouchListener(this);
 		
 		registerUpdateHandler(new SnowFlakeUpdateHandler());

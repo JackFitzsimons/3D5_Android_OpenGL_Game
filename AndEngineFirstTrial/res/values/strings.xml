@@ -3,10 +3,12 @@
     <string name="app_name">AndEngineFirstTrial</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Santas Helper</string>
     <string name="title_1">Square</string>
 	<string name="title_2">Hater</string>
-	<string name="start">Click to start helping Santa</string>
+	<string name="startButton">Start helping Santa</string>
+	<string name="quitButton">Exit</string>	
+	<string name="scoreButton">Score Board</string>		
 	<string name="howtoplay1">Quick tap the orange presents</string>
 	<string name="howtoplay2">To keep them in the sleigh!</string>
 	

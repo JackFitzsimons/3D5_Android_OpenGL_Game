@@ -3,18 +3,15 @@ package com.example.andenginefirsttrial;
 import java.util.Random;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.sprite.Sprite;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 
 //defines the class square an instance of which contains most of the variables for game play functionality 
 public class Square {
 	
 		MainActivity activity;
-	
-		int ON=-1;
-		int flash= -1;
 		
 		float speedX[] = new float[10];
 		float speedY[] = new float[10];
@@ -23,13 +20,13 @@ public class Square {
 		
 		float h;
     	float w;
+
+    	int ON= -1;
+    	float tON;
 		
 		float mag;
-		
-		int yellowSq[] = new int[8];
-		Boolean boxOn[] = new Boolean[8];
 	
-	    public Sprite sprite[] = new Sprite[10];
+	    public Present sprite[] = new Present[8];
 
 	    public static Square instance;
 	    Camera mCamera;
@@ -44,27 +41,21 @@ public class Square {
 	    // the constructor for class square
 	    private Square() {
 	    	activity = MainActivity.instance;
-	    	for(int i = 0;i<8; i++)
-	    		boxOn[i]=false;
-	  
-	    	ON = -1;
-	    	
+	  	    	
 	    	mag=3f;
 	    	
 	    	for(int i = 0; i<8; i++)
-	    		sprite[i] = new Sprite(0f, 0f, activity.mSquareType1, activity.getVertexBufferObjectManager());
-
-	    	sprite[8] = new Sprite(0f, 0f, activity.mSquareType2, activity.getVertexBufferObjectManager());
+	    		sprite[i] = new Present(0f, 0f, activity.mSquareType1, activity.mSquareType2, activity.mSquareType3, activity.getVertexBufferObjectManager());
 	    	
-	    	sprite[9] = new Sprite(0f, 0f, activity.mSquareType3, activity.getVertexBufferObjectManager());
-	    	
-	    	sprite[8].setVisible(false);
-	    	sprite[9].setVisible(false);
 	    	
 	        mCamera = MainActivity.getSharedInstance().mCamera;
 	        
 	        h = sprite[0].getHeight();
 	    	w = sprite[0].getWidth();
+	    	
+	    	Log.w("Outside","SetRandomOn");
+
+			this.setRandomSquareOn();
 	        
 	        Random rand = new Random();
 	        
@@ -104,35 +95,21 @@ public class Square {
 	
 	    // moves each square, is called in upDate screen in GameScene
 	    public void moveSquare(){
-	   		moveSquares();
+	    	for(int i = 0; i<8; i++)
+	    		sprite[i].downFlash();
+	   		moveEachSquare();
 	    	collisionDetection();
 	    }
 	    
-	    public Boolean checkIfAllOff(){
-	    		if(ON!=-1) {
-	    			return false;
-	    		}
-	    	
-	    	return true;
-	    }
-	    
-	    void moveSquares(){ //moves the square to the next position
+	    void moveEachSquare(){ //moves the square to the next position
 	    	int lL = 0;
 			int rL = (int) (mCamera.getWidth() - (int) sprite[0].getWidth());
 			
 			int uL = 60;
 			int dL = (int) (mCamera.getHeight() - (int) sprite[0].getHeight());
 
-	    	for(int i = 0; i<10; i++){
-	    		if(i<8){
-	    			if(yellowSq[i]> 0){
-	    				yellowSq[i]--;
-	    				if(yellowSq[i]==0){
-	    					setColor(2, i);
-	    				}
-	    			
-	    			}
-	    		}
+	    	for(int i = 0; i<8; i++){
+	    		
 	    		
 	    		//If hit wall turn around
 				
@@ -177,12 +154,10 @@ public class Square {
 	    
 	    void collisionDetection(){
 
-	    	for(int i = 0; i < 10;i++){
-	    		if(sprite[i].isVisible()){
+	    	for(int i = 0; i < 8;i++){
 		    		float olX = -1f;
 	    			float olY = -1f;
-		    		for(int j = i+1; j <10; j++){//checks if box A and B will hit and IF they do, what fraction of time will it be between frames
-		    			if(sprite[j].isVisible()){
+		    		for(int j = i+1; j <8; j++){//checks if box A and B will hit and IF they do, what fraction of time will it be between frames
 		    				olX = -1f;
 		    				olY = -1f;
 		    				
@@ -239,80 +214,46 @@ public class Square {
 		    						
 		    					}
 		    				
-	    				}
+	    				
 	    			}
 	    		}
 	    		
 	    	}
-	    	}
 	    	
-	    }
-	    
-	    void turnAllSquaresOff(){
-	    	for(int i = 0; i < 8; i++){
-	    		setColor(2,i);
-	    	}
+	    	
 	    }
 	    
 	    void setRandomSquareOn(){
+	    	Log.w("Inside","SetRandomOn");
 	    	Random rand = new Random();
-	    	int k = rand.nextInt(8);
-	    	if(k==flash) setColor(2,k);
-	    	setColor(1,k);
-	    	ON = k;
+	    	ON = rand.nextInt(8);
+	    	while(sprite[ON].getColorType()==2) ON = rand.nextInt(8);
+	    	sprite[ON].changeTexture(1);
+	    	tON = activity.time.checkTime(); 
+	    	
 	    	
 }
 	    
-	    void setColor(int i, int k){
-	    	if(i==1){
-	    		sprite[8].setVisible(true);
-	    		sprite[8].setPosition(sprite[k].getX(), sprite[k].getY());
-	    		speedX[8]= speedX[k];
-	    		speedY[8]= speedY[k];	    		
-	    		sprite[k].setVisible(false);
-	    	}
-	    	else if(i==2){
-	    		if(k==flash){
-	    			sprite[flash].setVisible(true);
-	    			sprite[flash].setPosition(sprite[9].getX(), sprite[9].getY());
-	    			speedX[flash]= speedX[9];
-	    			speedY[flash]= speedY[9];	    		
-	    			sprite[9].setVisible(false);
-	    			flash=-1;
-	    		}
-	    		else if(k == ON){
-	    			sprite[ON].setVisible(true);
-	    			sprite[ON].setPosition(sprite[8].getX(), sprite[8].getY());
-	    			speedX[ON]= speedX[8];
-	    			speedY[ON]= speedY[8];	    		
-	    			sprite[8].setVisible(false);
-	    		}
-	    		
-	    	}
-	    	else{
-	    		flash = k;
-	    		sprite[9].setVisible(true);
-    			sprite[9].setPosition(sprite[flash].getX(), sprite[flash].getY());
-    			speedX[9]= speedX[flash];
-    			speedY[9]= speedY[flash];	    		
-    			sprite[flash].setVisible(false);
-	    	}
-	    }
-	    
 	    void changeSpeed(float factor){
+
 	    	for(int i = 0; i<8; i++){
 	    		speedX[i]*=factor;
 	    		speedY[i]*=factor;
 	    	}
 	    }
 	    
-	    long tapSquare(float X, float Y){
+	    
+	    int tapSquare(float X, float Y){
 	    	
-	    	if(((X>sprite[8].getX())&&(X<(sprite[8].getX()+w)))&&(((Y>sprite[8].getY())&&(Y<(sprite[8].getY()+h))))){
-	    			setColor(2, ON);
-	    			yellowSq[ON]+=3;
-	    			ON=-1;
-	    			return 5;
+	    	if(((X>sprite[ON].getX())&&(X<(sprite[ON].getX()+w)))&&(((Y>sprite[ON].getY())&&(Y<(sprite[ON].getY()+h))))){	    			
+	    		sprite[ON].changeTexture(2);
+	    		ON=-1;
+    			this.setRandomSquareOn();
+	    		if  (tON - activity.time.checkTime() < 5){	
+	    			return (int)(5 -(tON - activity.time.checkTime()));
+	    		}
+	    		else 
+	    			return 0;
 	    	}
 	    	
 	    	return 0;

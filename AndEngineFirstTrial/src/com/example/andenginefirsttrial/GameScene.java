@@ -4,10 +4,10 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 
@@ -26,11 +26,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	public String scoreText = "Score: ";
 	
 	MainActivity activity;
-	
-	//private final int st = 20;
-	
-	private TimerActivity time;
-	
+			
 	public GameScene() {
 		// TODO Auto-generated 
 		activity = MainActivity.getSharedInstance();	
@@ -40,9 +36,10 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	    setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 	    mCamera = MainActivity.getSharedInstance().mCamera;
 	    score=0;
-	    time = new TimerActivity();
+	    activity.time = new TimerActivity();
 	    
 	    square = Square.getSharedInstance();
+	    
 	    attachChildren(square.sprite);
 	    
 	    s.setText(scoreText + 0);
@@ -51,7 +48,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	    
 	    float X = mCamera.getWidth() - 50 - t.getWidth();
 	    
-	    String temp= String.valueOf(time.checkTime());
+	    String temp= String.valueOf(activity.time.checkTime());
 	    
 	    if(temp.length()<=4)
 	    	t.setText("Time: " + temp);
@@ -65,16 +62,18 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		setOnSceneTouchListener(this);
 		activity = MainActivity.getSharedInstance();
 	    score=0;
-	    time = new TimerActivity();
+	    activity.time = new TimerActivity();
 	    
 	    square = Square.getSharedInstance();
+	    
+		Log.w("start","gamescene");
 	    
 	    s.setText(scoreText + 0);
 	    s.setPosition(20f, 20f);
 	    
 	    float X = mCamera.getWidth() - 20 - t.getWidth();
 	    
-	    String temp= String.valueOf(time.checkTime());
+	    String temp= String.valueOf(activity.time.checkTime());
 	    
 	    if(temp.length()<=4)
 	    	t.setText("Time: " + temp);
@@ -89,20 +88,16 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 
 
 	public void upDateScreen(){
-		if (time.checkTime()>0)
+		if (activity.time.checkTime()>0)
 		{
 		
-		String temp= String.valueOf(time.checkTime());
+		String temp= String.valueOf(activity.time.checkTime());
 	    
-		//Log.w("String", temp);
-		
 	    if(temp.length()<=4)
 	    	t.setText("Time: " + temp);
 	    
 		square.moveSquare();
-		
-		colourOnOff();
-		}
+				}
 		else {
 			activity.scoreString = s.getText();
 			activity.GOS.SceneSetUp();
@@ -110,17 +105,6 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		}
 	}
 	
-	public void colourOnOff(){
-		if(square.checkIfAllOff()){
-			square.setRandomSquareOn();
-			
-		}
-		
-	}
-	
-	
-	public void cleaner(){}
-
 
 	@Override
 	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -129,8 +113,8 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 			float X = pSceneTouchEvent.getX();
 			float Y = pSceneTouchEvent.getY();
 			long T = square.tapSquare(X, Y);
+			activity.time.AddTime(T);
 			if (T != 0){
-				time.AddTime(T);
 				score+=10;
 				s.setText(scoreText + score);
 			}
