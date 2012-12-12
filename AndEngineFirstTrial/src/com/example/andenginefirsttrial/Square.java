@@ -61,7 +61,6 @@ public class Square {
 	        h = sprite[0].getHeight();
 	    	w = sprite[0].getWidth();
 	    	
-	    	Log.w("Outside","SetRandomOn");
 
 			this.setRandomSquareOn();
 	        
@@ -107,6 +106,28 @@ public class Square {
 	    		sprite[i].downFlash();
 	   		moveEachSquare();
 	    	collisionDetection();
+	    	changeSquareOn();
+	    }
+	    
+	    void changeSquareOn(){
+	    	int level = activity.GS.level;
+	    	if(level==1 && (tON- activity.time.checkTime())>5){
+	    		switchNewOn();
+	    	}
+	    	else if(level==2 && (tON- activity.time.checkTime())>3){
+	    		switchNewOn();
+	    	}
+	    	else if((tON- activity.time.checkTime())>1){
+	    		switchNewOn();
+	    	}
+	    }
+	    
+	    void switchNewOn(){
+	    	if(ON!=-1)
+	    		sprite[ON].changeTexture(0);
+	    	ON = -1;
+	    	setRandomSquareOn();
+	    	
 	    }
 	    
 	    void moveEachSquare(){ //moves the square to the next position
@@ -245,17 +266,12 @@ public class Square {
 	    }
 	    
 	    void setRandomSquareOn(){
-	    	Log.w("Inside","SetRandomOn");
 	    	Random rand = new Random();
 	    	ON = rand.nextInt(8);
 	    	while(sprite[ON].getColorType()==2) ON = rand.nextInt(8);
 	    	sprite[ON].changeTexture(1);
-	    	tON = activity.time.checkTime(); 
-	    	
-			Log.w("tON", String.valueOf(tON));
-
-	    	
-}
+	    	tON = activity.time.checkTime();
+	    }
 	    
 	    void changeSpeed(float factor){
 
@@ -268,16 +284,16 @@ public class Square {
 	    
 	    long tapSquare(float X, float Y){
 	    	
-	    	if(((X>sprite[ON].getX())&&(X<(sprite[ON].getX()+w)))&&(((Y>sprite[ON].getY())&&(Y<(sprite[ON].getY()+h))))){	    			
-	    		sprite[ON].changeTexture(2);
-	    		ON=-1;
-    			Log.w("activity.time.checkTime()", String.valueOf(activity.time.checkTime()));
-	    		if  (tON - activity.time.checkTime() < 5){	
-	    			Log.w("Add Time", String.valueOf((5 -(tON - activity.time.checkTime()))));
-	    			return (long)(5 -(tON - activity.time.checkTime()));
-	    		}
-	    		else 
-	    			return 0;
+	    	if(ON!=-1){
+		    	if(((X>sprite[ON].getX())&&(X<(sprite[ON].getX()+w)))&&(((Y>sprite[ON].getY())&&(Y<(sprite[ON].getY()+h))))){	    			
+		    		sprite[ON].changeTexture(2);
+		    		ON=-1;
+		    		if  (tON - activity.time.checkTime() < 5){	
+		    			return (long)(5 -(tON - activity.time.checkTime()));
+		    		}
+		    		else 
+		    			return 0;
+		    	}
 	    	}
 	    	
 	    	return -1;

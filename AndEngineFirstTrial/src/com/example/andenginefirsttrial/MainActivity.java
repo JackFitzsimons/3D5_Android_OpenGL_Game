@@ -67,7 +67,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public Font handWritingFontWHITE;
 	public Font handWritingFontRED;
 	public Font handWritingFontBLACK;
-	public ITexture fontTexture;
+	public ITexture fontTexture1;
+	public ITexture fontTexture2;
+	public ITexture fontTexture3;
 	
 	public BitmapTextureAtlas mBitmapTextureAtlas;
 	public TextureRegion mSquareType1;
@@ -144,7 +146,6 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mGamePlayHeader = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mheader, this, "game_play_header.png", 0, 0);
 
 	    mSantaS.load();
-	    //MusicFactory.setAssetBasePath("mfx/");
 	    try{
 	    	this.music = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "It's Beginning to Look a Lot Like Christmas.ogg");
 	    	this.music.setLooping(true);
@@ -152,13 +153,17 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    catch(final IOException e){
 	    	Debug.e("Error", e);
 	    }
-	    fontTexture = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
+	    fontTexture1 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
+	    fontTexture2 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
+	    fontTexture3 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
 
-	    handWritingFontWHITE = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",20f,true,Color.WHITE);
-	    handWritingFontRED = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.RED);
-	    handWritingFontBLACK = FontFactory.createFromAsset(this.getFontManager(),fontTexture,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.BLACK);
+	    handWritingFontWHITE = FontFactory.createFromAsset(this.getFontManager(),fontTexture1,this.getAssets(),"strato-unlinked.ttf",20f,true,Color.WHITE);
+	    handWritingFontRED = FontFactory.createFromAsset(this.getFontManager(),fontTexture2,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.RED);
+	    handWritingFontBLACK = FontFactory.createFromAsset(this.getFontManager(),fontTexture3,this.getAssets(),"strato-unlinked.ttf",28f,true,Color.BLACK);
 	    
-	    getEngine().getTextureManager().loadTexture(fontTexture);
+	    getEngine().getTextureManager().loadTexture(fontTexture1);
+	    getEngine().getTextureManager().loadTexture(fontTexture2);
+	    getEngine().getTextureManager().loadTexture(fontTexture3);
 	    
 	    getEngine().getFontManager().loadFont(handWritingFontWHITE);
 	    getEngine().getFontManager().loadFont(handWritingFontRED);

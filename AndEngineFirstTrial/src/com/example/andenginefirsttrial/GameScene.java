@@ -17,6 +17,8 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	public int score;
 	public double timeRemaining;
 	
+	public int level = 1;
+	
 	Text s, t;
 	
 	Camera mCamera;
@@ -94,12 +96,12 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	public void upDateScreen(){
 		if (activity.time.checkTime()>0)
 		{
-		
+		this.levelUpdate();
 		String temp= String.valueOf(activity.time.checkTime());
 	    
 	    if(temp.length()<=4)
 	    	t.setText("Time: " + temp);
-	    
+	    //Log.w("level", String.valueOf(level));
 		square.moveSquare();
 				}
 		else {
@@ -109,6 +111,21 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		}
 	}
 	
+	public void levelUpdate(){
+		int NewLevel = level;
+		if(score<10){
+			NewLevel = 1;
+		}
+		else if(score < 110){
+			NewLevel = 2;
+		}
+		else {
+			NewLevel=3;
+		}
+		if(level!=NewLevel){
+			level = NewLevel;
+		}
+	}
 
 	@Override
 	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
@@ -118,12 +135,23 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 			float Y = pSceneTouchEvent.getY();
 			long T = square.tapSquare(X, Y);
 			
-			if (T != 0){
-				square.score_sprite(X, Y, T);
-				score+=10;
+			if (T >= 0){
+				if(level==1){
+					score+=1;
+					activity.time.AddTime(T);
+					square.score_sprite(X, Y, T);
+				}
+				else if(level==2){
+					score+=5;
+					activity.time.AddTime(T/2);
+					square.score_sprite(X, Y, (long)(T/2));
+				}
+				else{
+					score+=10;
+					activity.time.AddTime(T/3);
+					square.score_sprite(X, Y, (long)(T/3));
+				}
 				s.setText(scoreText + score);
-				activity.time.AddTime(T);
-
 			}
 		if(T!=-1)
 			square.setRandomSquareOn();
