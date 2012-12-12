@@ -20,6 +20,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	Text s, t;
 	
 	Camera mCamera;
+	Text score_text;
 	
 
 	
@@ -41,6 +42,9 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	    square = Square.getSharedInstance();
 	    
 	    attachChildren(square.sprite);
+	    
+	    attachChildren(square.sprite_score);
+	    
 	    
 	    s.setText(scoreText + 0);
 	    s.setPosition(20f, 20f);
@@ -113,11 +117,17 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 			float X = pSceneTouchEvent.getX();
 			float Y = pSceneTouchEvent.getY();
 			long T = square.tapSquare(X, Y);
-			activity.time.AddTime(T);
+			
 			if (T != 0){
+				square.score_sprite(X, Y, T);
 				score+=10;
 				s.setText(scoreText + score);
+				activity.time.AddTime(T);
+
 			}
+		if(T!=-1)
+			square.setRandomSquareOn();
+
 		
 		return true;
 	}

@@ -3,6 +3,7 @@ package com.example.andenginefirsttrial;
 import java.util.Random;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.text.Text;
 
 import android.util.FloatMath;
 import android.util.Log;
@@ -27,6 +28,11 @@ public class Square {
 		float mag;
 	
 	    public Present sprite[] = new Present[8];
+	    public Text sprite_score;
+	    float new_X = 0;
+	    float new_Y = 0;
+	    int count = 0;
+	    
 
 	    public static Square instance;
 	    Camera mCamera;
@@ -47,6 +53,8 @@ public class Square {
 	    	for(int i = 0; i<8; i++)
 	    		sprite[i] = new Present(0f, 0f, activity.mSquareType1, activity.mSquareType2, activity.mSquareType3, activity.getVertexBufferObjectManager());
 	    	
+	    	sprite_score = new Text(0f, 0f,activity.handWritingFontWHITE, "3", 3, activity.getVertexBufferObjectManager());
+	    	sprite_score.setVisible(false);
 	    	
 	        mCamera = MainActivity.getSharedInstance().mCamera;
 	        
@@ -150,6 +158,19 @@ public class Square {
 								
 				sprite[i].setPosition(newX, newY);
 	    	}
+	    	if(sprite_score.isVisible()){
+	    		float X_coord = sprite_score.getX();
+	    		float Y_coord = sprite_score.getY();
+	    		new_X = X_coord + ((activity.GS.t.getX() + (activity.GS.t.getWidth()/2) - X_coord)/10);
+	    		new_Y = Y_coord - ((Y_coord)/10);
+	    		sprite_score.setPosition(new_X, new_Y);
+	    		
+	    		if(count > 20){
+	    			sprite_score.setVisible(false);
+	    			count = 0;
+	    		}
+	    		count++;
+	    	}
 	    }
 	    
 	    void collisionDetection(){
@@ -231,6 +252,8 @@ public class Square {
 	    	sprite[ON].changeTexture(1);
 	    	tON = activity.time.checkTime(); 
 	    	
+			Log.w("tON", String.valueOf(tON));
+
 	    	
 }
 	    
@@ -243,19 +266,26 @@ public class Square {
 	    }
 	    
 	    
-	    int tapSquare(float X, float Y){
+	    long tapSquare(float X, float Y){
 	    	
 	    	if(((X>sprite[ON].getX())&&(X<(sprite[ON].getX()+w)))&&(((Y>sprite[ON].getY())&&(Y<(sprite[ON].getY()+h))))){	    			
 	    		sprite[ON].changeTexture(2);
 	    		ON=-1;
-    			this.setRandomSquareOn();
+    			Log.w("activity.time.checkTime()", String.valueOf(activity.time.checkTime()));
 	    		if  (tON - activity.time.checkTime() < 5){	
-	    			return (int)(5 -(tON - activity.time.checkTime()));
+	    			Log.w("Add Time", String.valueOf((5 -(tON - activity.time.checkTime()))));
+	    			return (long)(5 -(tON - activity.time.checkTime()));
 	    		}
 	    		else 
 	    			return 0;
 	    	}
 	    	
-	    	return 0;
+	    	return -1;
+	    }
+	    
+	    void score_sprite(float X, float Y, long extratime){
+	    	sprite_score.setText("+" + String.valueOf(extratime));
+	    	sprite_score.setPosition(X, Y);
+	    	sprite_score.setVisible(true);
 	    }
 }
