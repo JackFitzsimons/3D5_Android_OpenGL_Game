@@ -4,6 +4,7 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 
@@ -16,6 +17,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	public Square square;
 	public int score;
 	public double timeRemaining;
+	private Sprite header;
 	
 	public int level = 1;
 	
@@ -34,10 +36,16 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		// TODO Auto-generated 
 		activity = MainActivity.getSharedInstance();	
 		
+		 setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
+		 mCamera = MainActivity.getSharedInstance().mCamera;
+		
+		header = new Sprite(0,0, activity.mGamePlayHeader, activity.getVertexBufferObjectManager());
+		header.setScale(mCamera.getWidth()/header.getWidth());
+		attachChild(header);
+		
 		s = new Text(0, 0, activity.mFont, "Score:0123456789", 20, activity.getVertexBufferObjectManager());
 		t = new Text(0, 0, activity.mFont, "Time:00", 10, activity.getVertexBufferObjectManager());
-	    setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
-	    mCamera = MainActivity.getSharedInstance().mCamera;
+	   
 	    score=0;
 	    activity.time = new TimerActivity();
 	    
@@ -105,6 +113,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		square.moveSquare();
 				}
 		else {
+			activity.score=score;
 			activity.scoreString = s.getText();
 			activity.GOS.SceneSetUp();
 

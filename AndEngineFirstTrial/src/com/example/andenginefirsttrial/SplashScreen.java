@@ -57,6 +57,7 @@ import android.view.MotionEvent;
 		
 		for(int i=0; i<14;i++){
 			activity.mSnowSprite[i].setScale();
+			activity.mSnowSprite[i].setStartPosition();
 		}
 				
 		this.attachChildren(activity.mSnowSprite);

@@ -25,11 +25,18 @@ public class SnowFlake extends Sprite{
 		this.setScaleY(scale);
 	}
 	
+	
+	void setNewPosition(){
+		this.setPosition(SW*(r.nextFloat()), -this.getHeight());
+	}
+	void setStartPosition(){
+		this.setPosition(SW*(r.nextFloat()), SH*(r.nextFloat()));
+	}
 	public void setScale(){
 		scale=(r.nextFloat() + 0.5f)/2;
 		this.setScaleX(scale);
 		this.setScaleY(scale);
-		this.setPosition(SW*(r.nextFloat()), -(this.getHeight()));
+		this.setPosition(SW*(r.nextFloat()), (SH*r.nextFloat()));
 	}
 	
 	public void move(){
@@ -41,6 +48,7 @@ public class SnowFlake extends Sprite{
 		float y = this.getY();
 		if(y>=SH) {
 			this.setScale();
+			this.setNewPosition();
 			y = this.getY();
 		}
 		this.setPosition(this.getX(), y+(scale*2));

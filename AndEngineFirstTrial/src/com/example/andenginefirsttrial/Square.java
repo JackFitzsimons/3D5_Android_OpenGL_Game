@@ -203,6 +203,10 @@ public class Square {
 		    				olX = -1f;
 		    				olY = -1f;
 		    				
+		    				Boolean X, Y;
+		    				X=true;
+		    				Y=true;
+		    				
 		    				float X1 = sprite[i].getX();
 		    				float Y1 = sprite[i].getY();
 		    				float X2 = sprite[j].getX();
@@ -211,48 +215,108 @@ public class Square {
 		    			
 		    				if((X1 + w >= X2)&&(X1 <= X2)){
 		    					olX = X1 + w - X2;
+		    					X = true;
 		    				}
 		    				else if((X2 <= X1)&&(X2 + w >= X1)){
 		    					olX = X2 + w - X1;
+		    					X=false;
 		    				}
 		    			
 		    				if(olX>=0){
 		    					if((Y1 + h >= Y2)&&(Y1 <= Y2)){
 		    						olY = Y1 + h - Y2;
+		    						Y=true;
 		    					}
 		    				
 		    					else if((Y2 <= Y1)&&(Y2 + h >= Y1)){
 		    						olY = Y2 + h - Y1;
+		    						Y=false;
 		    					}
 		    				}
 		    			
 		    				if(olX>=0 && olY>=0 ){
 		    					if(olY>olX) {
-		    						
-		    							float t;
-		    							t = speedX[j];
-		    							speedX[j] = speedX[i];
-		    							speedX[i] = t;
+		    					
+		    						float t1, t2;
+	    							t1 = speedX[j];
+	    							t2 = speedX[i];
+	    							if(X){
+	    								if(t1<t2){
+	    									speedX[j]= t2;
+	    									speedX[i] = t1;
+	    								}
+	    								else{
+	    									speedX[j]= t1;
+	    									speedX[i] = t2;
+	    								}
+	    							}
+	    							else{
+	    								if(t1<t2){
+	    									speedX[j]= t1;
+	    									speedX[i] = t2;
+	    								}
+	    								else{
+	    									speedX[j]= t2;
+	    									speedX[i] = t1;
+	    								}
+	    							}
 		    						
 		    					}
 		    					if(olY<olX) {
 		    						
-		    							float t;
-		    							t = speedY[j];
-		    							speedY[j] = speedY[i];
-		    							speedY[i] = t;
+		    							float t1, t2;
+		    							t1 = speedY[j];
+		    							t2 = speedY[i];
+		    							if(Y){
+		    								if(t1<t2){
+		    									speedY[j]= t2;
+		    									speedY[i] = t1;
+		    								}
+		    								else{
+		    									speedY[j]= t1;
+		    									speedY[i] = t2;
+		    								}
+		    							}
+		    							else{
+		    								if(t1<t2){
+		    									speedY[j]= t1;
+		    									speedY[i] = t2;
+		    								}
+		    								else{
+		    									speedY[j]= t2;
+		    									speedY[i] = t1;
+		    								}
+		    							}
 		    						
 		    					}
 		    					
 		    					if(olX==olY) {
 		    						
-		    							float t;
-		    							t = speedY[j];
-		    							speedY[j] = speedY[i];
-		    							speedY[i] = t;
-		    							t = speedX[j];
-		    							speedX[j] = speedX[i];
-		    							speedX[i] = t;
+		    						float t1, t2;
+	    							t1 = speedY[j];
+	    							t2 = speedY[i];
+	    							if(Y){
+	    								if(t1<t2){
+	    									speedY[j]= t2;
+	    									speedY[i] = t1;
+	    								}
+	    								else{
+	    									speedY[j]= t1;
+	    									speedY[i] = t2;
+	    								}
+	    							}
+	    							t1 = speedX[j];
+	    							t2 = speedX[i];
+	    							if(X){
+	    								if(t1<t2){
+	    									speedX[j]= t2;
+	    									speedX[i] = t1;
+	    								}
+	    								else{
+	    									speedX[j]= t1;
+	    									speedX[i] = t2;
+	    								}
+	    							}
 		    						
 		    					}
 		    				

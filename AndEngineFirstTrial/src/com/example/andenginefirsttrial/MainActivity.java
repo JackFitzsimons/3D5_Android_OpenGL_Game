@@ -20,8 +20,11 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
 import org.andengine.util.debug.Debug;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 
 
 
@@ -36,7 +39,9 @@ public class MainActivity extends SimpleBaseGameActivity {
 	
 	static final int CAMERA_HEIGHT = 480;
 
-		
+	static final String filename = "savedScores";
+	
+	private SharedPreferences prefs;
 	    
 	 // ===========================================================
      // Fields
@@ -44,6 +49,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	 
 	
 	public TimerActivity time;
+	
+	public int highScores[] = new int[3];
 
 	public Font mFont;
 	
@@ -58,11 +65,14 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public CharSequence scoreString;
 	public int T;
 	
+	public int score;
+	
 	//creates an instance of each scene in the game allowing each to be accessed at any time
 	public GameOverScene GOS;
 	public GameScene GS;
 	public SplashScreen SS;
 	public MainMenuScene MMS;
+	public TopScoreScene TS;
 	
 	public Font handWritingFontWHITE;
 	public Font handWritingFontRED;
@@ -145,14 +155,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mheader = new BitmapTextureAtlas(this.getTextureManager(), 800, 70);
 	    mGamePlayHeader = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mheader, this, "game_play_header.png", 0, 0);
 
-	    mSantaS.load();
-	    try{
-	    	this.music = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "It's Beginning to Look a Lot Like Christmas.ogg");
-	    	this.music.setLooping(true);
-	    }
-	    catch(final IOException e){
-	    	Debug.e("Error", e);
-	    }
+	    mheader.load();
+	    
 	    fontTexture1 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
 	    fontTexture2 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
 	    fontTexture3 = new BitmapTextureAtlas(this.getTextureManager(),1024,1024);
@@ -169,6 +173,54 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    getEngine().getFontManager().loadFont(handWritingFontRED);
 	    getEngine().getFontManager().loadFont(handWritingFontBLACK);
 
+	  //setting preferences
+	   
+	    prefs = this.getSharedPreferences(filename, 0);
+	    
+	    try{
+	    	this.music = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "It's Beginning to Look a Lot Like Christmas.ogg");
+	    	this.music.setLooping(true);
+	    	if(checkMute() == "SILENT"){
+	    		music.pause();
+	    	}
+	    }
+	    catch(final IOException e){
+	    	Debug.e("Error", e);
+	    }
+	    
+	}
+	
+	String checkMute(){	// i = 1 2 or 3 for each place of interest
+		 //Log.w("Place"+String.valueOf(i), String.valueOf(prefs.getInt("Place"+String.valueOf(i), -1)));
+		return prefs.getString("Mute", "LOUD");
+	}
+	
+	void changeMute(){
+		String mute = prefs.getString("Mute", "LOUD");
+		 Editor editor = prefs.edit();
+		 if(mute == "LOUD"){
+			 editor.putString("Mute", "SILENT");
+			 music.pause();
+		 }
+		 else{
+			 editor.putString("Mute", "LOUD");
+			 music.resume();
+		 }
+		 
+		 editor.commit();
+	}
+	
+
+	int getScores(int i){	// i = 1 2 or 3 for each place of interest
+		 Log.w("Place"+String.valueOf(i), String.valueOf(prefs.getInt("Place"+String.valueOf(i), -1)));
+		return prefs.getInt("Place"+String.valueOf(i), -1);
+	}
+	
+	void setScores(int i, int score){
+		 Editor editor = prefs.edit();
+		 editor.putInt("Place"+String.valueOf(i), score);
+		 Log.w("Place"+String.valueOf(i), String.valueOf(score));
+		 editor.commit();
 	}
 
 	//Initialize each screen, when called returns the splash screen
@@ -178,6 +230,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		GS= new GameScene();
 		SS= new SplashScreen();
 		MMS= new MainMenuScene();
+		TS = new TopScoreScene();
 				
 		mCurrentScene = SS;
 		music.play();

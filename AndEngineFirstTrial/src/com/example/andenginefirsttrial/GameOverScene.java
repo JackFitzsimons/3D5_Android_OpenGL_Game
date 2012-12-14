@@ -42,8 +42,30 @@ public class GameOverScene extends Scene implements IOnSceneTouchListener{
 		
 		startTime = activity.time.checkTime();
 		
+		UpdateTopScores(activity.score);
+		
 		setOnSceneTouchListener(this);
 
+	}
+	
+	void UpdateTopScores(int score){
+		int a= activity.getScores(1);
+		int b= activity.getScores(2);
+		int c= activity.getScores(3);
+		
+		if(score>a){
+			activity.setScores(1, score);
+			activity.setScores(2, a);
+			activity.setScores(3, b);
+		}
+		else if(score>b){
+			activity.setScores(2, score);
+			activity.setScores(3, b);
+		}
+		else if(score>c){
+			activity.setScores(3, score);
+		}
+		
 	}
 
 	@Override
