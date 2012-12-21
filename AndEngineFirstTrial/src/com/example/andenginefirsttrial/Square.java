@@ -6,12 +6,15 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.text.Text;
 
 import android.util.FloatMath;
-import android.util.Log;
 
 
 //defines the class square an instance of which contains most of the variables for game play functionality 
 public class Square {
 	
+
+	// ===========================================================
+	// Global variables
+	// ===========================================================
 		MainActivity activity;
 		
 		float speedX[] = new float[10];
@@ -38,13 +41,12 @@ public class Square {
 	    Camera mCamera;
 	    Random randomGenerator = new Random();
 	    
-	    public static Square getSharedInstance() {
-	        if (instance == null)
-	            instance = new Square();
-	        return instance;
-	    }
 
-	    // the constructor for class square
+		// ===========================================================
+		// Global variables
+		// ===========================================================
+
+	    // the constructor for class square, sets up presents with initial position attaches children etc
 	    private Square() {
 	    	activity = MainActivity.instance;
 	  	    	
@@ -99,7 +101,14 @@ public class Square {
 	        }
 	        
 	    }
-	
+	    
+	    //Allows others to get this square
+	    public static Square getSharedInstance() {
+	        if (instance == null)
+	            instance = new Square();
+	        return instance;
+	    }
+	    
 	    // moves each square, is called in upDate screen in GameScene
 	    public void moveSquare(){
 	    	for(int i = 0; i<8; i++)
@@ -109,6 +118,7 @@ public class Square {
 	    	changeSquareOn();
 	    }
 	    
+	    //turns a random square orange after time
 	    void changeSquareOn(){
 	    	int level = activity.GS.level;
 	    	if(level==1 && (tON- activity.time.checkTime())>5){
@@ -122,6 +132,7 @@ public class Square {
 	    	}
 	    }
 	    
+	    //actually turns present orange 
 	    void switchNewOn(){
 	    	if(ON!=-1)
 	    		sprite[ON].changeTexture(0);
@@ -130,6 +141,7 @@ public class Square {
 	    	
 	    }
 	    
+	 
 	    void moveEachSquare(){ //moves the square to the next position
 	    	int lL = 0;
 			int rL = (int) (mCamera.getWidth() - (int) sprite[0].getWidth());
@@ -194,6 +206,7 @@ public class Square {
 	    	}
 	    }
 	    
+	    //makes sure presents bounce off one another
 	    void collisionDetection(){
 
 	    	for(int i = 0; i < 8;i++){
@@ -329,6 +342,7 @@ public class Square {
 	    	
 	    }
 	    
+	    //turns a random square orange
 	    void setRandomSquareOn(){
 	    	Random rand = new Random();
 	    	ON = rand.nextInt(8);
@@ -337,6 +351,7 @@ public class Square {
 	    	tON = activity.time.checkTime();
 	    }
 	    
+	    //makes everything go faster on level up
 	    void changeSpeed(float factor){
 
 	    	for(int i = 0; i<8; i++){
@@ -345,7 +360,7 @@ public class Square {
 	    	}
 	    }
 	    
-	    
+	    //check if the position that is touched corresponds to the orange square
 	    long tapSquare(float X, float Y){
 	    	
 	    	if(ON!=-1){
@@ -363,6 +378,7 @@ public class Square {
 	    	return -1;
 	    }
 	    
+	    //shows the score flying up to the the total score
 	    void score_sprite(float X, float Y, long extratime){
 	    	sprite_score.setText("+" + String.valueOf(extratime));
 	    	sprite_score.setPosition(X, Y);

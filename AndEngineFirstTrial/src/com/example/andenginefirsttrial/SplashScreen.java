@@ -1,32 +1,37 @@
 package com.example.andenginefirsttrial;
 
-import java.util.Random;
-
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.modifier.IModifier;
 
 import android.view.MotionEvent;
 
 // defining the splash screen class
-	public class SplashScreen extends Scene implements IOnSceneTouchListener{
+public class SplashScreen extends Scene implements IOnSceneTouchListener{
+
+	// ===========================================================
+	// Global variables
+	// ===========================================================
+	
 	MainActivity activity;
 	Sprite SantaSleigh;
 	Text Intro1;
 	Text Intro2;
 	
+
+	// ===========================================================
+	// Constructor
+	// ===========================================================
+	
+	//not used for consistancy purposes
 	public SplashScreen(){
 		//default constructor
 			}
 	
-	//method for setting or resetting Splashscreen
+	//method for setting or resetting Splashscreen and setting up the snow flakes
 	public void SceneSetUp(){
 	    MainActivity.getSharedInstance().setCurrentScene(this);
 
@@ -74,12 +79,12 @@ import android.view.MotionEvent;
 
 	}
 
-
+	//when screen is touched
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		// TODO Auto-generated method stub
 		if(pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN){
-			activity.MMS.SceneSetUp();
+			activity.MMS.SceneSetUp(); // go to main menu
 		}
 		return true;
 	}

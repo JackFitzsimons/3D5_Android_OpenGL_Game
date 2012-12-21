@@ -13,24 +13,34 @@ import android.view.MotionEvent;
 
 
 
+//===========================================================
+// Controlles the main game activity calling the presents to move, scores to change time to be incremented etc
+//===========================================================
 public class GameScene extends Scene implements IOnSceneTouchListener{
-	public Square square;
-	public int score;
-	public double timeRemaining;
-	private Sprite header;
 	
-	public int level = 1;
+	// ===========================================================
+	// Global variables
+	// ===========================================================
 	
-	Text s, t;
+	public Square square;	//controlled the presents on screen
+	public int score;	//incriments on tapping presents
+	public double timeRemaining;	
+	private Sprite header;	//the white snowy banner at the top of the screen
 	
-	Camera mCamera;
-	Text score_text;
+	public int level = 1;	//which of the 3 levels are you on
 	
-
+	Text s, t;	//score and time respectively
 	
-	public String scoreText = "Score: ";
+	Camera mCamera;	//view of the device
+	Text score_text;	
+	
+	public String scoreText = "Score: ";	//String version of the score_text Text object
 	
 	MainActivity activity;
+			
+	// ===========================================================
+	// Constructor - things declared here that can be kept in local memory through game play and can be re-initialised each time game is played
+	// ===========================================================
 			
 	public GameScene() {
 		// TODO Auto-generated 
@@ -38,17 +48,17 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		
 		 setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		 mCamera = MainActivity.getSharedInstance().mCamera;
-		
+				 
+		//put the snowy header on the screen
 		header = new Sprite(0,0, activity.mGamePlayHeader, activity.getVertexBufferObjectManager());
 		header.setScale(mCamera.getWidth()/header.getWidth());
 		attachChild(header);
 		
+		
 		s = new Text(0, 0, activity.mFont, "Score:0123456789", 20, activity.getVertexBufferObjectManager());
-		t = new Text(0, 0, activity.mFont, "Time:00", 10, activity.getVertexBufferObjectManager());
+		t = new Text(0, 0, activity.mFont, "Time:15", 10, activity.getVertexBufferObjectManager());
 	   
 	    score=0;
-	    activity.time = new TimerActivity();
-	    
 	    square = Square.getSharedInstance();
 	    
 	    attachChildren(square.sprite);
@@ -60,7 +70,7 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	    s.setPosition(20f, 20f);
 	    attachChildren(s);
 	    
-	    float X = mCamera.getWidth() - 50 - t.getWidth();
+	    float X = mCamera.getWidth() - 60 - t.getWidth();
 	    
 	    String temp= String.valueOf(activity.time.checkTime());
 	    
@@ -71,13 +81,19 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 	    attachChildren(t);
 
 	}
+			
+	// ===========================================================
+	// Methods
+	// ===========================================================
 	
+	//called when new game is played and instead of redeclaring everything we simply initialise what is already there
 	public void SceneSetUp(){
 		setOnSceneTouchListener(this);
 		activity = MainActivity.getSharedInstance();
+		
+		 activity.time.initial(15);
+		
 	    score=0;
-	    activity.time = new TimerActivity();
-	    
 	    square = Square.getSharedInstance();
 	    
 		Log.w("start","gamescene");
@@ -100,26 +116,32 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		
 	}
 
-
+	//Check if game is still being played (time!=0) and updates screen / goes to game over
 	public void upDateScreen(){
+		//if still playing
 		if (activity.time.checkTime()>0)
 		{
-		this.levelUpdate();
-		String temp= String.valueOf(activity.time.checkTime());
-	    
-	    if(temp.length()<=4)
-	    	t.setText("Time: " + temp);
-	    //Log.w("level", String.valueOf(level));
-		square.moveSquare();
-				}
+			this.levelUpdate(); //update level if necessary
+			
+			String temp= String.valueOf(activity.time.checkTime());
+		    
+			//put time on screen (provided it fits)
+		    if(temp.length()<=4)
+		    	t.setText("Time: " + temp);
+
+		    //change presents to next position for next frame
+		    square.moveSquare();
+		}
+		
+		//if game over
 		else {
 			activity.score=score;
 			activity.scoreString = s.getText();
 			activity.GOS.SceneSetUp();
-
 		}
 	}
-	
+
+	//check if score if high enough to move up a level
 	public void levelUpdate(){
 		int NewLevel = level;
 		if(score<10){
@@ -136,15 +158,17 @@ public class GameScene extends Scene implements IOnSceneTouchListener{
 		}
 	}
 
+	//called when screen is touched
 	@Override
 	public boolean onSceneTouchEvent(final Scene pScene, final TouchEvent pSceneTouchEvent) {
 		
+		//only if touched downward to avoid multiple touches
 		if(pSceneTouchEvent.getAction() == MotionEvent.ACTION_DOWN){
-			float X = pSceneTouchEvent.getX();
+			float X = pSceneTouchEvent.getX(); //get coordinates of the touch
 			float Y = pSceneTouchEvent.getY();
-			long T = square.tapSquare(X, Y);
+			long T = square.tapSquare(X, Y); //check if you touch a square
 			
-			if (T >= 0){
+			if (T >= 0){	//if so add score + time
 				if(level==1){
 					score+=1;
 					activity.time.AddTime(T);

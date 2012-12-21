@@ -30,25 +30,21 @@ import android.util.Log;
 
 /* main controlling class*/
 public class MainActivity extends SimpleBaseGameActivity {
-
-	
+		
 	// ===========================================================
-    // Constants
-    // ===========================================================
+	// Global Variables we wish to access from different areas of the game
+	// ===========================================================
+	
 	static final int CAMERA_WIDTH = 800;
 	
 	static final int CAMERA_HEIGHT = 480;
 
-	static final String filename = "savedScores";
+	static final String filename = "savedScores"; //for saying the file name to save our sharedPreferences
 	
 	private SharedPreferences prefs;
-	    
-	 // ===========================================================
-     // Fields
-     // ===========================================================
-	 
-	
+	 	
 	public TimerActivity time;
+	long t=0;
 	
 	public int highScores[] = new int[3];
 
@@ -66,6 +62,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public int T;
 	
 	public int score;
+	
+	Boolean AlreadyRunning= false;
 	
 	//creates an instance of each scene in the game allowing each to be accessed at any time
 	public GameOverScene GOS;
@@ -103,19 +101,12 @@ public class MainActivity extends SimpleBaseGameActivity {
 	public TextureRegion mGamePlayHeader;
 	
 	public SnowFlake mSnowSprite[] = new SnowFlake[14];
-    
-	 // ===========================================================
-     // Constructors
-     // ===========================================================
-
-     // ===========================================================
-     // Getter & Setter
-     // ===========================================================
-
-     // ===========================================================
-     // Methods for/from SuperClass/Interfaces
-     // ===========================================================
 	
+	// ===========================================================
+	// Methods
+	// ===========================================================
+  
+	//set up the AndEngine Options
 	@Override
 	public EngineOptions onCreateEngineOptions() {
 	    instance = this;
@@ -126,6 +117,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    return engine_options;
 	}
 
+	//creates all the textures and music ect from assets and starts music playing
 	@Override
 	protected void onCreateResources() {
 		mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 256, 256);
@@ -177,45 +169,59 @@ public class MainActivity extends SimpleBaseGameActivity {
 	   
 	    prefs = this.getSharedPreferences(filename, 0);
 	    
+	    try{prefs.getInt("MUTE", 3);}
+	    catch(Exception e){
+	    	prefs.edit().putInt("MUTE", 0).commit();
+	    }
+	    
 	    try{
+	    	
 	    	this.music = MusicFactory.createMusicFromAsset(this.mEngine.getMusicManager(), this, "It's Beginning to Look a Lot Like Christmas.ogg");
 	    	this.music.setLooping(true);
-	    	if(checkMute() == "SILENT"){
-	    		music.pause();
-	    	}
+	    	
+	    	
 	    }
 	    catch(final IOException e){
 	    	Debug.e("Error", e);
 	    }
 	    
+	    if(checkMUTE() == 2){
+    		music.pause();
+    	}
+	    
 	}
 	
-	String checkMute(){	// i = 1 2 or 3 for each place of interest
-		 //Log.w("Place"+String.valueOf(i), String.valueOf(prefs.getInt("Place"+String.valueOf(i), -1)));
-		return prefs.getString("Mute", "LOUD");
+	//checks if music is pause playing or not yet initialised
+	int checkMUTE(){	// i = 1 2 or 3 for each place of interest
+		return prefs.getInt("MUTE", 1);
 	}
 	
-	void changeMute(){
-		String mute = prefs.getString("Mute", "LOUD");
-		 Editor editor = prefs.edit();
-		 if(mute == "LOUD"){
-			 editor.putString("Mute", "SILENT");
-			 music.pause();
-		 }
-		 else{
-			 editor.putString("Mute", "LOUD");
-			 music.resume();
-		 }
-		 
-		 editor.commit();
-	}
-	
+	//play to pause, pause to play
+	void changeMUTE(){
+		if(	prefs.getInt("MUTE", 3) == 1){
+			prefs.edit().putInt("MUTE", 2).commit();
+    		//music.pause();
+		}
+		else if(prefs.getInt("MUTE", 3) == 2){
+			prefs.edit().putInt("MUTE", 1).commit();
+			//music.play();
+		}
+		
+		
+	if(music.isPlaying()) {
+			music.pause();
+    } else {
+    	music.play();
+    }
 
+	}
+	
+	//returns the top 3 scores from the shared preferences
 	int getScores(int i){	// i = 1 2 or 3 for each place of interest
-		 Log.w("Place"+String.valueOf(i), String.valueOf(prefs.getInt("Place"+String.valueOf(i), -1)));
 		return prefs.getInt("Place"+String.valueOf(i), -1);
 	}
-	
+
+	//sets the top three scores
 	void setScores(int i, int score){
 		 Editor editor = prefs.edit();
 		 editor.putInt("Place"+String.valueOf(i), score);
@@ -225,12 +231,16 @@ public class MainActivity extends SimpleBaseGameActivity {
 
 	//Initialize each screen, when called returns the splash screen
 	protected Scene onCreateScene() {
+		AlreadyRunning = true;
+		time = new TimerActivity();
+
 		mEngine.registerUpdateHandler(new FPSLogger());
 		GOS= new GameOverScene() ;
 		GS= new GameScene();
 		SS= new SplashScreen();
 		MMS= new MainMenuScene();
 		TS = new TopScoreScene();
+
 				
 		mCurrentScene = SS;
 		music.play();
@@ -240,12 +250,7 @@ public class MainActivity extends SimpleBaseGameActivity {
 		return mCurrentScene;
 	}
 
-        
-        
-     // ===========================================================
-     // Methods
-     // ===========================================================
-
+	//allows other scenes to get the shared MainActivity
 	public static MainActivity getSharedInstance() {
 	    return instance;
 	}
@@ -255,10 +260,8 @@ public class MainActivity extends SimpleBaseGameActivity {
 	    mCurrentScene = scene;
 	    getEngine().setScene(mCurrentScene);
 	}
-
-	    
-	 // ===========================================================
-     // Inner and Anonymous Classes
-     // ===========================================================
+	
+	
+	
 	}
 

@@ -3,6 +3,9 @@ package com.example.andenginefirsttrial;
 import org.andengine.engine.handler.IUpdateHandler;
 
 
+// ===========================================================
+// Updates the GameScene Class each frame
+// ===========================================================
 public class GameLoopUpdateHandler implements IUpdateHandler{
 
 	@Override

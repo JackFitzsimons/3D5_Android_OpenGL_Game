@@ -6,13 +6,22 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
-import android.util.Log;
 
 public class SnowFlake extends Sprite{
+
+	// ===========================================================
+	// Global variables
+	// ===========================================================
+	
 	public float scale=1;
 	private float SH, SW;
 	private Random r= new Random();
 	int rot;
+	
+
+	// ===========================================================
+	// Constructor
+	// ===========================================================
 	
 	public SnowFlake(float a, float b, ITextureRegion tr, VertexBufferObjectManager v, float ScreenHeight, float ScreenWidth){
 		super(a,b,tr,v);
@@ -25,13 +34,21 @@ public class SnowFlake extends Sprite{
 		this.setScaleY(scale);
 	}
 	
+	// ===========================================================
+	// Methods
+	// ===========================================================
 	
+	//when snow falls off the bottom of the screen
 	void setNewPosition(){
 		this.setPosition(SW*(r.nextFloat()), -this.getHeight());
 	}
+
+	//where snow flake begins
 	void setStartPosition(){
 		this.setPosition(SW*(r.nextFloat()), SH*(r.nextFloat()));
 	}
+
+	//sets the size and rotation of the snow flake
 	public void setScale(){
 		scale=(r.nextFloat() + 0.5f)/2;
 		this.setScaleX(scale);
@@ -39,6 +56,7 @@ public class SnowFlake extends Sprite{
 		this.setPosition(SW*(r.nextFloat()), (SH*r.nextFloat()));
 	}
 	
+	//moves and rotates the snow flake down the screen
 	public void move(){
 		if(rot==1)
 			this.setRotation(this.getRotation() + scale);

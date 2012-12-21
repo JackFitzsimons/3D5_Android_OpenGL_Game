@@ -3,6 +3,7 @@ package com.example.andenginefirsttrial;
 import org.andengine.engine.handler.IUpdateHandler;
 
 public class SnowFlakeUpdateHandler implements IUpdateHandler{
+	//tells the snow flakes to keep dropping down the screen on every frame
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
 		if(MainActivity.getSharedInstance().mCurrentScene.getClass().equals(SplashScreen.class) || MainActivity.getSharedInstance().mCurrentScene.getClass().equals(MainMenuScene.class) ||  MainActivity.getSharedInstance().mCurrentScene.getClass().equals(TopScoreScene.class))
